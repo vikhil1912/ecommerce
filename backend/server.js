@@ -2,6 +2,7 @@ import express from "express";
 import "dotenv/config";
 import authRoutes from "./routes/auth.route.js";
 import productRoutes from "./routes/product.route.js";
+import cartRoutes from "./routes/cart.route.js";
 import { connectDB } from "./lib/db.js";
 import cookieParser from "cookie-parser";
 
@@ -13,6 +14,7 @@ app.use(cookieParser());
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/product", productRoutes);
+app.use("/api/v1/cart", cartRoutes);
 
 app.listen(port, () => {
   console.log(`App is listening to the port:${port}`);
