@@ -72,3 +72,39 @@ export const deleteProduct = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const getRecommendations = async (req, res) => {
+  try {
+    const products = await Product.find({}).limit(5);
+    return res.json({ products });
+  } catch (error) {
+    console.log("error in getRecommendations controller", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getProductsByCategory = async (req, res) => {
+  try {
+    const { category } = req.params;
+    const products = await Product.find({ category });
+    return res.json({ products });
+  } catch (error) {
+    console.log("error in getProductsByCategory controller", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const toogleIsFeatured = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    if (product) {
+      product.isFeatured = !product.isFeatured;
+      await product.save();
+    }
+    return res.json({ message: "Toggled is isFeatured" });
+  } catch (error) {
+    console.log("error in getProductsByCategory controller", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
