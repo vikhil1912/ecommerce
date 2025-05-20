@@ -16,4 +16,6 @@ router.post("/logout", authLogoutController);
 
 router.post("/refreshtoken", refreshToken);
 
+//Todo: implement getProfile
+
 export default router;

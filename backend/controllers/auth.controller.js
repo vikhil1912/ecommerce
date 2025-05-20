@@ -55,7 +55,6 @@ export const authSignupController = async (req, res) => {
     setCookies(res, accessToken, refreshToken);
     await storeRefreshTokenToDB(newUser, refreshToken);
     await newUser.save();
-    req.user = newUser;
     return res.status(201).json({ message: "user created successfully" });
   } catch (error) {
     console.log("error in authSignupController", error.message);
@@ -79,7 +78,6 @@ export const authLoginController = async (req, res) => {
     const { accessToken, refreshToken } = generateTokens(user._id);
     setCookies(res, accessToken, refreshToken);
     await storeRefreshTokenToDB(user, refreshToken);
-    req.user = user;
     return res.status(200).json({ message: "user logged in successfully" });
   } catch (error) {
     console.log("error in authLoginController", error.message);
@@ -91,6 +89,8 @@ export const authLogoutController = async (req, res) => {
   try {
     //Todo: pass protect middleware
     const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken)
+      return res.status(401).json({ message: "Invalid token" });
     const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
     await Token.findOneAndDelete({ userId: decoded.userId });
     res.clearCookie("accessToken");
@@ -132,3 +132,5 @@ export const refreshToken = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+//Todo: implement getProfile
