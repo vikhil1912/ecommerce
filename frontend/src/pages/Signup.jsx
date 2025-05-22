@@ -5,17 +5,18 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "lucide-react";
 
-const Login = () => {
+const Signup = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { mutate: submitLogin, isPending } = useMutation({
+  const { mutate: submitSignup, isPending } = useMutation({
     mutationFn: async (data) => {
-      return await axiosInstance.post("/auth/login", data);
+      return await axiosInstance.post("/auth/signup", data);
     },
     onSuccess: () => {
-      toast.success("user logged in");
+      toast.success("user signed up");
       queryClient.invalidateQueries({ queryKey: ["userData"] });
       navigate("/");
     },
@@ -26,11 +27,19 @@ const Login = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    submitLogin({ email, password });
+    submitSignup({ email, password, name });
   };
   return (
     <div className="w-full h-[742px] flex items-center justify-center">
       <form className="bg-white p-[20px]" onSubmit={handleOnSubmit}>
+        <input
+          type="text"
+          placeholder="name"
+          name="name"
+          required
+          onChange={(e) => setName(e.target.value)}
+          className="input input-bordered h-[40px] my-2 rounded-[6px]  bg-gray-400 px-2 text-black font-medium focus:outline-black flex items-center"
+        />
         <input
           type="email"
           placeholder="email"
@@ -52,11 +61,11 @@ const Login = () => {
           disabled={isPending}
           className="h-[40px] bg-amber-300 w-full rounded-[6px] flex items-center justify-center text-white hover:bg-amber-200 cursor-pointer"
         >
-          {isPending ? <Loader className="size-5 animate-spin" /> : "Login"}
+          {isPending ? <Loader className="size-5 animate-spin" /> : "Signup"}
         </button>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default Signup;

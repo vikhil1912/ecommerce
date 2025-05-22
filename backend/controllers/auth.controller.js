@@ -7,7 +7,7 @@ import "dotenv/config";
 
 const generateTokens = (userId) => {
   const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "15m",
+    expiresIn: "1m",
   });
   const refreshToken = jwt.sign({ userId }, process.env.REFRESH_TOKEN_SECRET, {
     expiresIn: "7d",
@@ -20,7 +20,7 @@ const setCookies = (res, accessToken, refreshToken) => {
     httpOnly: true,
     secure: process.env.NODE_ENV == "production",
     sameSite: "strict",
-    maxAge: 15 * 60 * 1000,
+    maxAge: 1 * 60 * 1000,
   });
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
@@ -69,12 +69,15 @@ export const authLoginController = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     const user = await User.findOne({ email });
     if (!user) return res.status(401).json({ message: "User doesn't exist" });
-    const isToken = await Token.findOne({ userId: user._id });
-    if (isToken)
-      return res.status(400).json({ message: "User already logged in" });
     const isCorrect = await bcrypt.compare(password, user.password);
     if (!isCorrect)
       return res.status(401).json({ message: "Invalid credintials" });
+    const isToken = await Token.findOne({ userId: user._id });
+    if (!req.cookies.accessToken && !req.cookies.refreshToken && isToken) {
+      await Token.findOneAndDelete({ userId: req.user._id });
+    }
+    if (req.cookies.accessToken)
+      return res.status(400).json({ message: "User already logged in" });
     const { accessToken, refreshToken } = generateTokens(user._id);
     setCookies(res, accessToken, refreshToken);
     await storeRefreshTokenToDB(user, refreshToken);
@@ -87,7 +90,6 @@ export const authLoginController = async (req, res) => {
 
 export const authLogoutController = async (req, res) => {
   try {
-    //Todo: pass protect middleware
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken)
       return res.status(401).json({ message: "Invalid token" });
@@ -118,7 +120,7 @@ export const refreshToken = async (req, res) => {
     const accessToken = jwt.sign(
       { userId: user._id },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "15m" }
+      { expiresIn: "1m" }
     );
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
@@ -133,4 +135,13 @@ export const refreshToken = async (req, res) => {
   }
 };
 
+export const getUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("-password");
+    res.json(user);
+  } catch (error) {
+    console.log("error in getUser", error.message);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
 //Todo: implement getProfile

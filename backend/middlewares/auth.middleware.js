@@ -6,7 +6,12 @@ export const protectRoute = async (req, res, next) => {
   try {
     const accessToken = req.cookies.accessToken;
     if (!accessToken) return res.status(401).json({ message: "Unauthorised" });
-    const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    let decoded;
+    try {
+      decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    } catch (err) {
+      decoded = null;
+    }
     if (!decoded) return res.status(401).json({ message: "Invalid Token" });
     const user = await User.findOne({ _id: decoded.userId }).select(
       "-password"
