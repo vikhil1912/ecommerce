@@ -2,7 +2,7 @@ import React from "react";
 import { FaOpencart } from "react-icons/fa";
 import { IoLogOutOutline } from "react-icons/io5";
 import { FaLock } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
@@ -10,6 +10,7 @@ import { Loader } from "lucide-react";
 
 const Navbar = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { data: userData, isLoading: userDataLoading } = useQuery({
     queryKey: ["userData"],
     queryFn: async () => {
@@ -50,7 +51,7 @@ const Navbar = () => {
   const count = userData?.data?.cartItems?.length || 0;
 
   return (
-    <nav className="w-full h-[40px] bg-amber-400 sticky top-0 flex items-center justify-between">
+    <nav className="z-100 w-full h-[40px] bg-amber-400 sticky top-0 flex items-center justify-between">
       <Link to="/">
         <h4 className="ml-[20px] hover:bg-amber-500 cursor-pointer">SHOPPER</h4>
       </Link>
@@ -73,7 +74,7 @@ const Navbar = () => {
             </span>
           </Link>
         )}
-        {!user && (
+        {!user && !userDataLoading && (
           <Link to="/signup">
             <span className="text-2xl hover:bg-amber-500 cursor-pointer">
               Signup
@@ -81,10 +82,15 @@ const Navbar = () => {
           </Link>
         )}
         {isAdmin && (
-          <Link to="#">
-            <span className="flex items-center text-2xl bg-red-700 hover:bg-red-400 cursor-pointer">
+          <Link to="/admin-secret-dashboard">
+            <button
+              onClick={() => navigate("/admin-secret-dashboard")}
+              className={
+                "flex items-center px-4 py-2 mx-2 rounded-md transition-colors duration-200 bg-emerald-600 text-white"
+              }
+            >
               <FaLock /> Dashboard
-            </span>
+            </button>
           </Link>
         )}
         {user && (
@@ -94,7 +100,7 @@ const Navbar = () => {
             </span>
           </Link>
         )}
-        {!user && (
+        {!user && !userDataLoading && (
           <Link to="/login">
             <span className="text-2xl hover:bg-amber-500 cursor-pointer">
               Login
