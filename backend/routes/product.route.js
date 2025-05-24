@@ -15,7 +15,7 @@ const router = Router();
 router.get("/", protectRoute, adminRoute, getAllProducts);
 router.get("/featured", getFeaturedProducts);
 router.post("/createproduct", protectRoute, adminRoute, createProduct);
-router.delete("/delete/:id", protectRoute, adminRoute, deleteProduct);
+router.delete("/:id", protectRoute, adminRoute, deleteProduct);
 router.get("/recommendations", getRecommendations);
 router.get("/category/:category", getProductsByCategory);
 router.put("/:id", protectRoute, adminRoute, toogleIsFeatured);

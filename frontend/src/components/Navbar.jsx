@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaOpencart } from "react-icons/fa";
 import { IoLogOutOutline } from "react-icons/io5";
 import { FaLock } from "react-icons/fa";
@@ -12,19 +12,18 @@ const Navbar = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { data: userData, isLoading: userDataLoading } = useQuery({
-    queryKey: ["userData"],
+    queryKey: ["userData1"],
     queryFn: async () => {
       try {
-        return await axiosInstance.get("/auth/user");
+        const response = await axiosInstance.get("/auth/user");
+        return response;
       } catch (error) {
         if (error.response && error.response.status == 401) {
           try {
             const refreshResponse = await axiosInstance.post(
               "/auth/refreshtoken"
             );
-            if (refreshResponse.status == 200) {
-              queryClient.invalidateQueries({ queryKey: ["userData"] });
-            }
+            queryClient.invalidateQueries({ queryKey: ["userData1"] });
           } catch (err) {
             if (err.response && err.response.status == 401) return null;
             throw err;
@@ -39,6 +38,7 @@ const Navbar = () => {
       return axiosInstance.post("/auth/logout");
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userData1"] });
       queryClient.invalidateQueries({ queryKey: ["userData"] });
       toast.success("Logged out successfully");
     },
@@ -47,8 +47,10 @@ const Navbar = () => {
   console.log(userData?.data);
 
   const user = userData?.data;
-  const isAdmin = userData?.data?.role === "admin";
   const count = userData?.data?.cartItems?.length || 0;
+  console.log(count);
+
+  const isAdmin = userData?.data?.role === "admin";
 
   return (
     <nav className="z-100 w-full h-[40px] bg-amber-400 sticky top-0 flex items-center justify-between">

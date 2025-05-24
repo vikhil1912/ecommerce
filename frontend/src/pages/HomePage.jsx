@@ -46,7 +46,7 @@ const HomePage = () => {
   });
 
   const featuredProducts = getFeaturedProducts?.data || null;
-  console.log(featuredProducts);
+  console.log("featuredProducts", featuredProducts);
 
   return (
     <div className="relative min-h-screen text-white overflow-hidden">
@@ -64,9 +64,9 @@ const HomePage = () => {
         </div>
         {!isLoading && featuredProducts.length > 0 && (
           <Carousel responsive={responsive}>
-            {featuredProducts.map((product) => {
-              <ProductCard product={product} key={product._id} />;
-            })}
+            {featuredProducts.map((product) => (
+              <ProductCard product={product} key={product._id} />
+            ))}
           </Carousel>
         )}
       </div>

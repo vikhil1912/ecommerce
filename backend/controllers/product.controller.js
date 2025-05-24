@@ -5,7 +5,7 @@ import cloudinary from "../lib/cloudinary.js";
 export const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find({});
-    res.json({ products });
+    res.json(products);
   } catch (error) {
     console.log("error in getAllProducts controller", error.message);
     res.status(500).json({ message: "Internal server error" });
@@ -15,7 +15,7 @@ export const getAllProducts = async (req, res) => {
 export const getFeaturedProducts = async (req, res) => {
   try {
     const products = await Product.find({ isFeatured: true });
-    res.json({ products });
+    res.json(products);
   } catch (error) {
     console.log("error in getAllProducts controller", error.message);
     res.status(500).json({ message: "Internal server error" });

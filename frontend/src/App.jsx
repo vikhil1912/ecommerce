@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 
 const App = () => {
+  const queryClient = useQueryClient();
   const { data: userData, isLoading: userDataLoading } = useQuery({
     queryKey: ["userData"],
     queryFn: async () => {

@@ -7,12 +7,12 @@ import { ShoppingCart } from "lucide-react";
 const ProductCard = ({ product }) => {
   const queryClient = useQueryClient();
   const { mutate: addToCartMutate, isPending } = useMutation({
-    mutationFn: async (data) => {
-      await axiosInstance.post(`/cart/${product._d}`, data);
+    mutationFn: async () => {
+      await axiosInstance.post(`/cart/${product._id}`);
     },
-    onSuccess: () => {
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["userData1"] });
       toast.success("Product added to cart");
-      queryClient.invalidateQueries({ queryKey: ["userData"] });
     },
     onError: (err) => {
       toast.error(err?.response?.data?.message || "Something went wrong");
@@ -22,7 +22,7 @@ const ProductCard = ({ product }) => {
     <div className="flex w-full relative flex-col overflow-hidden rounded-lg border border-gray-700 shadow-lg">
       <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl">
         <img
-          className="object-cover w-full"
+          className="object-cover w-full z-100"
           src={product.image}
           alt="product image"
         />
@@ -43,7 +43,7 @@ const ProductCard = ({ product }) => {
         <button
           className="flex items-center justify-center rounded-lg bg-emerald-600 px-5 py-2.5 text-center text-sm font-medium
 					 text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300"
-          //   onClick={handleAddToCart}
+          onClick={addToCartMutate}
         >
           <ShoppingCart size={22} className="mr-2" />
           Add to cart
