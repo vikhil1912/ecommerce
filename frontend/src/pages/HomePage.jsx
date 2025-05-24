@@ -62,13 +62,16 @@ const HomePage = () => {
             <CategoryCard category={category} key={category.name} />
           ))}
         </div>
-        {!isLoading && featuredProducts.length > 0 && (
-          <Carousel responsive={responsive}>
-            {featuredProducts.map((product) => (
-              <ProductCard product={product} key={product._id} />
-            ))}
-          </Carousel>
-        )}
+        <div>
+          <h2 className="text-4xl text-white my-7">Featured Products</h2>
+          {!isLoading && featuredProducts.length > 0 && (
+            <Carousel responsive={responsive}>
+              {featuredProducts.map((product) => (
+                <ProductCard product={product} key={product._id} />
+              ))}
+            </Carousel>
+          )}
+        </div>
       </div>
     </div>
   );
