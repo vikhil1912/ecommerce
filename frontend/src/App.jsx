@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import CategoryPage from "./pages/CategoryPage.jsx";
 import { axiosInstance } from "./lib/axios.js";
+import CartPage from "./pages/CartPage.jsx";
 
 const App = () => {
   const queryClient = useQueryClient();
@@ -65,6 +66,10 @@ const App = () => {
           }
         />
         <Route path="/category/:category" element={<CategoryPage />} />
+        <Route
+          path="/cart"
+          element={user ? <CartPage /> : <Navigate to="/signup" />}
+        />
       </Routes>
     </div>
   );

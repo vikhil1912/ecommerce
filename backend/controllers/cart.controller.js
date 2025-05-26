@@ -73,7 +73,7 @@ export const decreaseQuantity = async (req, res) => {
     const user = await User.findById(req.user._id);
     const item = user.cartItems.find((i) => i.product.toString() === id);
     if (item) {
-      if (item.quantity == 0)
+      if (item.quantity <= 1)
         user.cartItems = user.cartItems.filter(
           (i) => i.product.toString() != id
         );
