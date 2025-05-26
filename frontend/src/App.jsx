@@ -8,33 +8,34 @@ import Navbar from "./components/Navbar.jsx";
 import AdminPage from "./pages/AdminPage.jsx";
 import { Toaster } from "react-hot-toast";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import CategoryPage from "./pages/CategoryPage.jsx";
+import { axiosInstance } from "./lib/axios.js";
 
 const App = () => {
   const queryClient = useQueryClient();
-  const { data: userData, isLoading: userDataLoading } = useQuery({
-    queryKey: ["userData"],
+  const { data: userdata, isLoading: userDataLoading } = useQuery({
+    queryKey: ["userdata"],
     queryFn: async () => {
       try {
-        return await axiosInstance.get("/auth/user");
-      } catch (error) {
-        if (error.response && error.response.status == 401) {
+        return axiosInstance.get("/auth/user");
+      } catch (err) {
+        if (err?.response?.data == 401) {
           try {
-            const refreshResponse = await axiosInstance.post(
-              "/auth/refreshtoken"
-            );
-            if (refreshResponse.status == 200) {
-              queryClient.invalidateQueries({ queryKey: ["userData"] });
+            await axiosInstance.post("/auth/refreshtoken");
+          } catch (error) {
+            if (error?.response?.data == 401) {
+              queryClient.invalidateQueries({ queryKey: ["userdata"] });
+              return null;
             }
-          } catch (err) {
-            if (err.response && err.response.status == 401) return null;
-            throw err;
+            throw new Error();
           }
         }
-        throw error;
       }
     },
   });
-  const user = userData?.data;
+  const user = userdata?.data;
+  console.log(userdata);
+
   return (
     <div className="bg-gray-900 min-h-screen">
       <Toaster />
@@ -52,9 +53,18 @@ const App = () => {
         <Route
           path="/admin-secret-dashboard"
           element={
-            user && user.role === "admin" ? <AdminPage /> : <Navigate to="/" />
+            userDataLoading ? (
+              <>
+                <h1 className="text-3xl text-white">Loading...</h1>
+              </>
+            ) : user && user.role === "admin" ? (
+              <AdminPage />
+            ) : (
+              <Navigate to="/" />
+            )
           }
         />
+        <Route path="/category/:category" element={<CategoryPage />} />
       </Routes>
     </div>
   );
