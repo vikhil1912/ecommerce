@@ -52,7 +52,7 @@ const CreateProduct = () => {
       toast.success("Product created");
       setName("");
       setDescription("");
-      setPrice();
+      setPrice(0);
       setCategory("");
       setImage("");
       document.getElementById("image").value = "";

@@ -16,13 +16,14 @@ export const createCheckoutSession = async (req, res) => {
       total_amount += amount;
       return {
         price_data: {
-          currency: "usd",
+          currency: "INR",
           product_data: {
             name: product.product.name,
             images: [product.product.image],
           },
           unit_amount: amount,
         },
+        quantity: product.quantity,
       };
     });
 
@@ -30,10 +31,10 @@ export const createCheckoutSession = async (req, res) => {
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
-      success_url: `${process.env.CLIENT_URL}/purchase-success?sessionId={CHECKOUT_SESSION_ID}`,
+      success_url: `${process.env.CLIENT_URL}/purchase-success/{CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.CLIENT_URL}/purchase-cancel`,
       metadata: {
-        userId: req.user._id,
+        userId: req.user._id.toString(),
         products: JSON.stringify(
           products.map((product) => {
             return {
@@ -59,6 +60,10 @@ export const checkoutSuccess = async (req, res) => {
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
     if (session.payment_status == "paid") {
+      const isExist = await Order.findOne({ stripeSessionId: sessionId });
+      if (isExist) {
+        return res.status(400).json({ message: "Order already placed" });
+      }
       const products = JSON.parse(session.metadata.products);
       const newOrder = new Order({
         user: session.metadata.userId,
@@ -69,7 +74,7 @@ export const checkoutSuccess = async (req, res) => {
             quantity: product.quantity,
           };
         }),
-        totalAmount: session.amount_total,
+        totalAmount: session.amount_total / 100,
         stripeSessionId: session.id,
       });
       await newOrder.save();

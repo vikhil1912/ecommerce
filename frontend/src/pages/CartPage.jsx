@@ -18,7 +18,7 @@ const CartPage = () => {
       return await axiosInstance.get("/cart/");
     },
   });
-  const products = cartProducts?.data;
+  const products = cartProducts?.data || [];
   console.log(products);
 
   return (
@@ -50,7 +50,7 @@ const CartPage = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              <OrderSummary />
+              <OrderSummary products={products} />
               <GiftCouponCard />
             </motion.div>
           )}

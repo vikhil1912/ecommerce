@@ -11,6 +11,7 @@ import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import CategoryPage from "./pages/CategoryPage.jsx";
 import { axiosInstance } from "./lib/axios.js";
 import CartPage from "./pages/CartPage.jsx";
+import PurchaseSuccessPage from "./pages/PurchaseSuccessPage.jsx";
 
 const App = () => {
   const queryClient = useQueryClient();
@@ -66,9 +67,10 @@ const App = () => {
           }
         />
         <Route path="/category/:category" element={<CategoryPage />} />
+        <Route path="/cart" element={<CartPage />} />
         <Route
-          path="/cart"
-          element={user ? <CartPage /> : <Navigate to="/signup" />}
+          path="/purchase-success/:sessionId"
+          element={<PurchaseSuccessPage />}
         />
       </Routes>
     </div>

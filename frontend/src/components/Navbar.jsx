@@ -7,8 +7,10 @@ import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
 import { Loader } from "lucide-react";
+import { Sidebar } from "primereact/sidebar";
 
 const Navbar = () => {
+  const [visibleRight, setVisibleRight] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { data: userData, isLoading: userDataLoading } = useQuery({
@@ -63,7 +65,7 @@ const Navbar = () => {
             Home
           </span>
         </Link>
-        {user && (
+        {
           <Link to="/cart">
             <span className="relative text-2xl flex items-center  w-[90px] justify-around hover:bg-amber-500 cursor-pointer">
               <FaOpencart className="" /> Cart{" "}
@@ -75,7 +77,7 @@ const Navbar = () => {
               </span>
             </span>
           </Link>
-        )}
+        }
         {!user && !userDataLoading && (
           <Link to="/signup">
             <span className="text-2xl hover:bg-amber-500 cursor-pointer">
@@ -96,7 +98,7 @@ const Navbar = () => {
           </Link>
         )}
         {user && (
-          <Link to="#" onClick={logoutMutate}>
+          <Link to="#" onClick={() => setVisibleRight(true)}>
             <span className="text-2xl hover:bg-amber-500 cursor-pointer">
               <IoLogOutOutline />
             </span>
@@ -110,6 +112,16 @@ const Navbar = () => {
           </Link>
         )}
       </div>
+      <Sidebar
+        visible={visibleRight}
+        position="right"
+        onHide={() => setVisibleRight(false)}
+        className="bg-white z-101 pt-10 px-4"
+      >
+        <p className="h-10 w-full text-white  bg-gray-600 flex items-center justify-center rounded-2xl hover:bg-gray-500 ">
+          My Orders
+        </p>
+      </Sidebar>
     </nav>
   );
 };

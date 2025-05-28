@@ -86,3 +86,15 @@ export const decreaseQuantity = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const clearCart = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    user.cartItems = [];
+    await user.save();
+    return res.json({ message: "Cart cleared" });
+  } catch (error) {
+    console.log("error in clearCart controller", error.message);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
