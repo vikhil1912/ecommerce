@@ -12,6 +12,7 @@ const ProductCard = ({ product }) => {
     },
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["userData1"] });
+      queryClient.invalidateQueries({ queryKey: ["cartItems"] });
       toast.success("Product added to cart");
     },
     onError: (err) => {
@@ -19,10 +20,10 @@ const ProductCard = ({ product }) => {
     },
   });
   return (
-    <div className="flex w-full  relative flex-col overflow-hidden rounded-lg border border-gray-700 shadow-lg">
-      <div className="relative mx-3 mt-3 flex h-50 overflow-hidden rounded-xl">
+    <div className="flex w-86  relative flex-col overflow-hidden rounded-lg border border-gray-700 shadow-lg">
+      <div className="relative mx-3 mt-3 flex h-35 w-76 overflow-hidden rounded-xl">
         <img
-          className="object-cover w-full z-100"
+          className="object-cover w-full z-50"
           src={product.image}
           alt="product image"
         />
@@ -35,7 +36,7 @@ const ProductCard = ({ product }) => {
         </h5>
         <div className="mt-2 mb-5 flex items-center justify-between">
           <p>
-            <span className="text-3xl font-bold text-emerald-400">
+            <span className="text-2xl font-bold text-emerald-400">
               ${product.price}
             </span>
           </p>

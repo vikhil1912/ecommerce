@@ -70,7 +70,7 @@ const EmptyCartUI = () => (
     transition={{ duration: 0.5 }}
   >
     <ShoppingCart className="h-24 w-24 text-gray-300" />
-    <h3 className="text-2xl font-semibold ">Your cart is empty</h3>
+    <h3 className="text-2xl font-semibold text-white ">Your cart is empty</h3>
     <p className="text-gray-400">
       Looks like you {"haven't"} added anything to your cart yet.
     </p>

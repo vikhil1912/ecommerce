@@ -64,7 +64,7 @@ const CartItem = ({ item }) => {
             >
               <Minus className="text-gray-300" />
             </button>
-            <p>{item.quantity}</p>
+            <p className="text-white">{item.quantity}</p>
             <button
               className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border
 							 border-gray-600 bg-gray-700 hover:bg-gray-600 focus:outline-none 
