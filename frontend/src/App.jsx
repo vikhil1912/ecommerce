@@ -12,6 +12,10 @@ import CategoryPage from "./pages/CategoryPage.jsx";
 import { axiosInstance } from "./lib/axios.js";
 import CartPage from "./pages/CartPage.jsx";
 import PurchaseSuccessPage from "./pages/PurchaseSuccessPage.jsx";
+import Orders from "./pages/Orders.jsx";
+import AddressPage from "./pages/AddressPage.jsx";
+import AddAddressForm from "./components/AddAddressForm.jsx";
+import UpdateAddress from "./components/UpdateAddress.jsx";
 
 const App = () => {
   const queryClient = useQueryClient();
@@ -71,6 +75,22 @@ const App = () => {
         <Route
           path="/purchase-success/:sessionId"
           element={<PurchaseSuccessPage />}
+        />
+        <Route
+          path="/orders"
+          element={user ? <Orders /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/address"
+          element={user ? <AddressPage /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/address-add-form"
+          element={user ? <AddAddressForm /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/address-edit-form/:id"
+          element={user ? <UpdateAddress /> : <Navigate to="/" />}
         />
       </Routes>
     </div>

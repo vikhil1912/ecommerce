@@ -4,7 +4,7 @@ import Order from "../models/order.model.js";
 
 export const createCheckoutSession = async (req, res) => {
   try {
-    const { products } = req.body;
+    const { products, address } = req.body;
 
     if (!Array.isArray(products) || products.length == 0) {
       return res.status(401).json({ message: "Inavalid products Array" });
@@ -44,6 +44,7 @@ export const createCheckoutSession = async (req, res) => {
             };
           })
         ),
+        address: address._id.toString(),
       },
     });
 
@@ -74,6 +75,7 @@ export const checkoutSuccess = async (req, res) => {
             quantity: product.quantity,
           };
         }),
+        address: session.metadata.address,
         totalAmount: session.amount_total / 100,
         stripeSessionId: session.id,
       });

@@ -34,6 +34,12 @@ const schema = mongoose.Schema(
       enum: ["customer", "admin"],
       default: "customer",
     },
+    addresses: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "address",
+      },
+    ],
   },
   { timestamps: true }
 );

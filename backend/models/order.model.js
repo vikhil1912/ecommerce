@@ -35,6 +35,10 @@ const orderSchema = new mongoose.Schema(
       type: String,
       unique: true,
     },
+    address: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "address",
+    },
   },
   { timestamps: true }
 );

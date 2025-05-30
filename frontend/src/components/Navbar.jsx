@@ -8,6 +8,7 @@ import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
 import { Loader } from "lucide-react";
 import { Sidebar } from "primereact/sidebar";
+import { UserRound } from "lucide-react";
 
 const Navbar = () => {
   const [visibleRight, setVisibleRight] = useState(false);
@@ -100,7 +101,7 @@ const Navbar = () => {
         {user && (
           <Link to="#" onClick={() => setVisibleRight(true)}>
             <span className="text-2xl hover:bg-amber-500 cursor-pointer">
-              <IoLogOutOutline />
+              <UserRound />
             </span>
           </Link>
         )}
@@ -116,10 +117,34 @@ const Navbar = () => {
         visible={visibleRight}
         position="right"
         onHide={() => setVisibleRight(false)}
-        className="bg-white z-101 pt-10 px-4"
+        className="bg-gray-700 z-101 pt-10 px-4"
       >
-        <p className="h-10 w-full text-white  bg-gray-600 flex items-center justify-center rounded-2xl hover:bg-gray-500 ">
+        <p
+          className="h-10 mt-10 w-full text-white  bg-gray-500 flex items-center justify-center rounded-2xl hover:bg-gray-400 cursor-pointer "
+          onClick={() => {
+            setVisibleRight(false);
+            navigate("/orders");
+          }}
+        >
           My Orders
+        </p>
+        <p
+          className="h-10 mt-5 w-full text-white  bg-gray-500 flex items-center justify-center rounded-2xl hover:bg-gray-400 cursor-pointer "
+          onClick={() => {
+            setVisibleRight(false);
+            navigate("/address");
+          }}
+        >
+          Address
+        </p>
+        <p
+          className="h-10 mt-5 w-full text-white  bg-gray-500 flex items-center justify-center rounded-2xl hover:bg-gray-400 cursor-pointer "
+          onClick={() => {
+            setVisibleRight(false);
+            logoutMutate();
+          }}
+        >
+          Logout <IoLogOutOutline className="ml-4" />
         </p>
       </Sidebar>
     </nav>
