@@ -29,7 +29,7 @@ const App = () => {
           try {
             await axiosInstance.post("/auth/refreshtoken");
           } catch (error) {
-            if (error?.response?.data == 401) {
+            if (error?.response?.status == 401) {
               queryClient.invalidateQueries({ queryKey: ["userdata"] });
               return null;
             }
@@ -40,7 +40,15 @@ const App = () => {
     },
   });
   const user = userdata?.data;
-  console.log(userdata);
+  console.log(userdata?.data);
+
+  // if (userDataLoading) {
+  //   return (
+  //     <div className="bg-gray-900 min-h-screen flex items-center justify-center">
+  //       <h1 className="text-3xl text-white">Loading...</h1>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="bg-gray-900 min-h-screen">
@@ -91,6 +99,10 @@ const App = () => {
         <Route
           path="/address-edit-form/:id"
           element={user ? <UpdateAddress /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/orders"
+          element={user ? <Orders /> : <Navigate to="/" />}
         />
       </Routes>
     </div>

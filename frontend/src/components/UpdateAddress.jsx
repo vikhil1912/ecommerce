@@ -38,7 +38,7 @@ const UpdateAddress = () => {
     },
     onSuccess: () => {
       toast.success("Address updated");
-      queryClient.invalidateQueries({ queryKey: ["allAddresses"] });
+      queryClient.invalidateQueries({ queryKey: ["allAddresses1"] });
       navigate("/address");
     },
     onError: (error) => {

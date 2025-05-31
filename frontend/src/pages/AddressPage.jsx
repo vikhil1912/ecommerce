@@ -8,7 +8,7 @@ import { axiosInstance } from "../lib/axios";
 const AddressPage = () => {
   const navigate = useNavigate();
   const { data: allAddresses } = useQuery({
-    queryKey: ["allAddresses"],
+    queryKey: ["allAddresses1"],
     queryFn: async () => {
       return axiosInstance.get("/address/");
     },

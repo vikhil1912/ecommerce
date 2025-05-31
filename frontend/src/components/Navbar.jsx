@@ -41,9 +41,11 @@ const Navbar = () => {
       return axiosInstance.post("/auth/logout");
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["userData1"] });
-      queryClient.invalidateQueries({ queryKey: ["userData"] });
       toast.success("Logged out successfully");
+      // queryClient.invalidateQueries({ queryKey: ["userdata"] });
+      // queryClient.invalidateQueries({ queryKey: ["userData1"] });
+      navigate("/");
+      window.location.reload();
     },
     onError: (err) => toast.error(err.response.data.message),
   });

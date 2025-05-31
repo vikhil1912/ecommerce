@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import { ShoppingCart } from "lucide-react";
 import PeopleAlsoBought from "../components/PeopleAlsoBought.jsx";
 import CartItem from "../components/CartItem.jsx";
-import GiftCouponCard from "../components/GiftCouponCard.jsx";
 import OrderSummary from "../components/OrderSummary.jsx";
 
 const CartPage = () => {
@@ -19,8 +18,6 @@ const CartPage = () => {
     },
   });
   const products = cartProducts?.data || [];
-  console.log(products);
-
   return (
     <div className="py-8 md:py-16">
       <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
@@ -51,7 +48,6 @@ const CartPage = () => {
               transition={{ duration: 0.5, delay: 0.4 }}
             >
               <OrderSummary products={products} />
-              <GiftCouponCard />
             </motion.div>
           )}
         </div>

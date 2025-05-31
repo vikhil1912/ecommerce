@@ -15,7 +15,7 @@ const OrderSummary = ({ products }) => {
   const [address, setAddress] = useState("");
   const queryClient = useQueryClient();
   const { data: allAddressesQuery, isLoading } = useQuery({
-    queryKey: ["allAddress"],
+    queryKey: ["allAddress2"],
     queryFn: async () => await axiosInstance.get("/address/"),
   });
   const addresses = allAddressesQuery?.data;
@@ -92,7 +92,11 @@ const OrderSummary = ({ products }) => {
           >
             <option value="">Select an Address</option>
             {addresses?.map((address) => (
-              <option key={address._id} value={address.description}>
+              <option
+                className="line-clamp-1"
+                key={address._id}
+                value={address.description}
+              >
                 {address.description}
               </option>
             ))}

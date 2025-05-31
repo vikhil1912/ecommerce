@@ -22,7 +22,7 @@ const AddAddressForm = () => {
     },
     onSuccess: () => {
       toast.success("Address added");
-      queryClient.invalidateQueries({ queryKey: ["allAddresses"] });
+      queryClient.invalidateQueries({ queryKey: ["allAddresses1"] });
       setName("");
       setDescription("");
       setCity("");

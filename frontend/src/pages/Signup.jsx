@@ -18,7 +18,7 @@ const Signup = () => {
     onSuccess: () => {
       toast.success("user signed up");
       queryClient.invalidateQueries({ queryKey: ["userData1"] });
-      queryClient.invalidateQueries({ queryKey: ["userData"] });
+      queryClient.invalidateQueries({ queryKey: ["userdata"] });
       navigate("/");
     },
     onError: (error) => {

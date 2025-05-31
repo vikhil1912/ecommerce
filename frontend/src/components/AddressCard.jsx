@@ -14,7 +14,7 @@ const AddressCard = ({ address }) => {
       if (flag) await axiosInstance.delete(`/address/${address._id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["allAddresses"] });
+      queryClient.invalidateQueries({ queryKey: ["allAddresses1"] });
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Something went wrong");
