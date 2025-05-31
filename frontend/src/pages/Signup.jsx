@@ -13,7 +13,17 @@ const Signup = () => {
   const navigate = useNavigate();
   const { mutate: submitSignup, isPending } = useMutation({
     mutationFn: async (data) => {
-      return await axiosInstance.post("/auth/signup", data);
+      try {
+        const response = await axiosInstance.post("/auth/signup", data);
+        if (response?.status === 200) {
+          localStorage.setItem("user", true);
+          localStorage.setItem("role", response?.data.role);
+        }
+        return response.data;
+      } catch (error) {
+        console.log("error in signup mutation", error.message);
+        return;
+      }
     },
     onSuccess: () => {
       toast.success("user signed up");

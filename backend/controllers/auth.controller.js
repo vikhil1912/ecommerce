@@ -5,10 +5,14 @@ import jwt, { decode } from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import "dotenv/config";
 
-const generateTokens = (userId) => {
-  const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "15m",
-  });
+const generateTokens = (userId, role) => {
+  const accessToken = jwt.sign(
+    { userId, role },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: "15m",
+    }
+  );
   const refreshToken = jwt.sign({ userId }, process.env.REFRESH_TOKEN_SECRET, {
     expiresIn: "7d",
   });
@@ -51,11 +55,16 @@ export const authSignupController = async (req, res) => {
         .status(400)
         .json({ message: "password must be of atleast 6 characters" });
     const newUser = new User({ email, password, name });
-    const { accessToken, refreshToken } = generateTokens(newUser._id);
+    const { accessToken, refreshToken } = generateTokens(
+      newUser._id,
+      newUser.role
+    );
     setCookies(res, accessToken, refreshToken);
     await storeRefreshTokenToDB(newUser, refreshToken);
     await newUser.save();
-    return res.status(201).json({ message: "user created successfully" });
+    return res
+      .status(201)
+      .json({ role: newUser.role, message: "user created successfully" });
   } catch (error) {
     console.log("error in authSignupController", error.message);
     return res.status(500).json({ message: "Internal server error" });
@@ -78,10 +87,12 @@ export const authLoginController = async (req, res) => {
     }
     if (req.cookies.accessToken)
       return res.status(400).json({ message: "User already logged in" });
-    const { accessToken, refreshToken } = generateTokens(user._id);
+    const { accessToken, refreshToken } = generateTokens(user._id, user.role);
     setCookies(res, accessToken, refreshToken);
     await storeRefreshTokenToDB(user, refreshToken);
-    return res.status(200).json({ message: "user logged in successfully" });
+    return res
+      .status(200)
+      .json({ role: user.role, message: "user logged in successfully" });
   } catch (error) {
     console.log("error in authLoginController", error.message);
     return res.status(500).json({ message: "Internal server error" });
@@ -128,7 +139,7 @@ export const refreshToken = async (req, res) => {
       sameSite: "strict",
       maxAge: 15 * 60 * 1000,
     });
-    res.json({ message: "Token refreshed successfully" });
+    res.json({ role: user.role, message: "Token refreshed successfully" });
   } catch (error) {
     console.log("error in refreshtoken", error.message);
     return res.status(500).json({ message: "Internal server error" });

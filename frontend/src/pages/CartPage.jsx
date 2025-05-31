@@ -18,6 +18,13 @@ const CartPage = () => {
     },
   });
   const products = cartProducts?.data || [];
+  if (cartItemsLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="loader"></div>
+      </div>
+    );
+  }
   return (
     <div className="py-8 md:py-16">
       <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">

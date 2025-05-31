@@ -26,6 +26,10 @@ const Navbar = () => {
             const refreshResponse = await axiosInstance.post(
               "/auth/refreshtoken"
             );
+            if (refreshResponse?.status === 200) {
+              localStorage.setItem("user", true);
+              localStorage.setItem("role", refreshResponse?.data.role);
+            }
             queryClient.invalidateQueries({ queryKey: ["userData1"] });
           } catch (err) {
             if (err.response && err.response.status == 401) return null;
@@ -38,7 +42,12 @@ const Navbar = () => {
   });
   const { mutate: logoutMutate, isPending } = useMutation({
     mutationFn: async () => {
-      return axiosInstance.post("/auth/logout");
+      const response = await axiosInstance.post("/auth/logout");
+      if (response?.status === 200) {
+        localStorage.removeItem("user");
+        localStorage.removeItem("role");
+      }
+      return response;
     },
     onSuccess: () => {
       toast.success("Logged out successfully");

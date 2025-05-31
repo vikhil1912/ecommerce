@@ -16,40 +16,9 @@ import Orders from "./pages/Orders.jsx";
 import AddressPage from "./pages/AddressPage.jsx";
 import AddAddressForm from "./components/AddAddressForm.jsx";
 import UpdateAddress from "./components/UpdateAddress.jsx";
+import ProtectRoute from "./auth/ProtectRoute.jsx";
 
 const App = () => {
-  const queryClient = useQueryClient();
-  const { data: userdata, isLoading: userDataLoading } = useQuery({
-    queryKey: ["userdata"],
-    queryFn: async () => {
-      try {
-        return axiosInstance.get("/auth/user");
-      } catch (err) {
-        if (err?.response?.data == 401) {
-          try {
-            await axiosInstance.post("/auth/refreshtoken");
-          } catch (error) {
-            if (error?.response?.status == 401) {
-              queryClient.invalidateQueries({ queryKey: ["userdata"] });
-              return null;
-            }
-            throw new Error();
-          }
-        }
-      }
-    },
-  });
-  const user = userdata?.data;
-  console.log(userdata?.data);
-
-  // if (userDataLoading) {
-  //   return (
-  //     <div className="bg-gray-900 min-h-screen flex items-center justify-center">
-  //       <h1 className="text-3xl text-white">Loading...</h1>
-  //     </div>
-  //   );
-  // }
-
   return (
     <div className="bg-gray-900 min-h-screen">
       <Toaster />
@@ -58,24 +27,32 @@ const App = () => {
         <Route path="/" element={<HomePage />} />
         <Route
           path="/login"
-          element={!user ? <Login /> : <Navigate to="/" />}
+          element={
+            <ProtectRoute
+              isAuthRoute={true}
+              isAdminRoute={false}
+              children={<Login />}
+            />
+          }
         />
         <Route
           path="/signup"
-          element={!user ? <Signup /> : <Navigate to="/" />}
+          element={
+            <ProtectRoute
+              isAuthRoute={true}
+              isAdminRoute={false}
+              children={<Signup />}
+            />
+          }
         />
         <Route
           path="/admin-secret-dashboard"
           element={
-            userDataLoading ? (
-              <>
-                <h1 className="text-3xl text-white">Loading...</h1>
-              </>
-            ) : user && user.role === "admin" ? (
-              <AdminPage />
-            ) : (
-              <Navigate to="/" />
-            )
+            <ProtectRoute
+              isAuthRoute={false}
+              isAdminRoute={true}
+              children={<AdminPage />}
+            />
           }
         />
         <Route path="/category/:category" element={<CategoryPage />} />
@@ -86,24 +63,45 @@ const App = () => {
         />
         <Route
           path="/orders"
-          element={user ? <Orders /> : <Navigate to="/" />}
+          element={
+            <ProtectRoute
+              isAuthRoute={false}
+              isAdminRoute={false}
+              children={<Orders />}
+            />
+          }
         />
         <Route
           path="/address"
-          element={user ? <AddressPage /> : <Navigate to="/" />}
+          element={
+            <ProtectRoute
+              isAuthRoute={false}
+              isAdminRoute={false}
+              children={<AddressPage />}
+            />
+          }
         />
         <Route
           path="/address-add-form"
-          element={user ? <AddAddressForm /> : <Navigate to="/" />}
+          element={
+            <ProtectRoute
+              isAuthRoute={false}
+              isAdminRoute={false}
+              children={<AddAddressForm />}
+            />
+          }
         />
         <Route
           path="/address-edit-form/:id"
-          element={user ? <UpdateAddress /> : <Navigate to="/" />}
+          element={
+            <ProtectRoute
+              isAuthRoute={false}
+              isAdminRoute={false}
+              children={<UpdateAddress />}
+            />
+          }
         />
-        <Route
-          path="/orders"
-          element={user ? <Orders /> : <Navigate to="/" />}
-        />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );

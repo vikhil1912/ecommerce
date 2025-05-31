@@ -5,6 +5,7 @@ import { axiosInstance } from "../lib/axios.js";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import ProductCard from "../components/ProductCard.jsx";
+import { motion } from "framer-motion";
 
 const responsive = {
   superLargeDesktop: {
@@ -57,11 +58,16 @@ const HomePage = () => {
         <p className="text-center text-xl text-gray-300 mb-12">
           Discover the latest trends in eco-friendly fashion
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
           {categories.map((category) => (
             <CategoryCard category={category} key={category.name} />
           ))}
-        </div>
+        </motion.div>
         <div>
           <h2 className="text-4xl text-white my-7">Featured Products</h2>
           {!isLoading && featuredProducts.length > 0 && (
