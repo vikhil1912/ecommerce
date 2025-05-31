@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaOpencart } from "react-icons/fa";
 import { IoLogOutOutline } from "react-icons/io5";
 import { FaLock } from "react-icons/fa";
@@ -36,7 +36,7 @@ const Navbar = () => {
             throw err;
           }
         }
-        throw error;
+        return null;
       }
     },
   });
@@ -51,8 +51,6 @@ const Navbar = () => {
     },
     onSuccess: () => {
       toast.success("Logged out successfully");
-      // queryClient.invalidateQueries({ queryKey: ["userdata"] });
-      // queryClient.invalidateQueries({ queryKey: ["userData1"] });
       navigate("/");
       window.location.reload();
     },
@@ -61,25 +59,27 @@ const Navbar = () => {
   console.log(userData?.data);
 
   const user = userData?.data;
+  const x = user; // dont remove this x as this is to trigger userData to refetch continously
   const count = userData?.data?.cartItems?.length || 0;
-  console.log(count);
-
-  const isAdmin = userData?.data?.role === "admin";
+  const isUserLoggedIn = localStorage.getItem("user");
+  const role = localStorage.getItem("role");
 
   return (
-    <nav className="z-100 w-full h-[40px] bg-amber-400 sticky top-0 flex items-center justify-between">
+    <nav className="z-100 w-full h-[50px] bg-gray-700 sticky top-0 flex items-center justify-between">
       <Link to="/">
-        <h4 className="ml-[20px] hover:bg-amber-500 cursor-pointer">SHOPPER</h4>
+        <h4 className="ml-[20px] transition-colors text-2xl duration-200 text-black hover:bg-white hover:text-black py-2 px-4 rounded-2xl cursor-pointer">
+          SHOPPER
+        </h4>
       </Link>
-      <div className="flex w-[400px] items-center justify-around">
+      <div className="flex w-[400px] items-center justify-around ">
         <Link to="/">
-          <span className="text-2xl hover:bg-amber-500 cursor-pointer">
+          <span className="text-2xl transition-colors duration-200  cursor-pointer hover:bg-white  py-1 px-1 rounded-2xl">
             Home
           </span>
         </Link>
         {
           <Link to="/cart">
-            <span className="relative text-2xl flex items-center  w-[90px] justify-around hover:bg-amber-500 cursor-pointer">
+            <span className="relative text-2xl flex items-center  w-[120px] justify-around  transition-colors duration-200  hover:cursor-pointer hover:bg-white  py-1 px-4 rounded-2xl">
               <FaOpencart className="" /> Cart{" "}
               <span
                 className="absolute -top-1 left-4 bg-emerald-500 text-white rounded-full px-2 py-0.5 
@@ -90,35 +90,35 @@ const Navbar = () => {
             </span>
           </Link>
         }
-        {!user && !userDataLoading && (
+        {!isUserLoggedIn && (
           <Link to="/signup">
-            <span className="text-2xl hover:bg-amber-500 cursor-pointer">
+            <span className="text-2xl transition-colors duration-200  hover:cursor-pointer hover:bg-white  py-1 px-4 rounded-2xl">
               Signup
             </span>
           </Link>
         )}
-        {isAdmin && (
+        {isUserLoggedIn && role === "admin" && (
           <Link to="/admin-secret-dashboard">
             <button
               onClick={() => navigate("/admin-secret-dashboard")}
               className={
-                "flex items-center px-4 py-2 mx-2 rounded-md transition-colors duration-200 bg-emerald-600 text-white"
+                "flex items-center px-4 py-2 mx-2 rounded-md transition-colors duration-200 bg-emerald-600 text-white hover:cursor-pointer hover:bg-emerald-700"
               }
             >
               <FaLock /> Dashboard
             </button>
           </Link>
         )}
-        {user && (
+        {isUserLoggedIn && (
           <Link to="#" onClick={() => setVisibleRight(true)}>
-            <span className="text-2xl hover:bg-amber-500 cursor-pointer">
+            <div className="text-2xl transition-colors duration-200  cursor-pointer hover:bg-white  py-1 px-1 rounded-full">
               <UserRound />
-            </span>
+            </div>
           </Link>
         )}
-        {!user && !userDataLoading && (
+        {!isUserLoggedIn && (
           <Link to="/login">
-            <span className="text-2xl hover:bg-amber-500 cursor-pointer">
+            <span className="text-2xl transition-colors duration-200  cursor-pointer hover:bg-white  py-1 px-4 rounded-2xl">
               Login
             </span>
           </Link>
@@ -132,6 +132,15 @@ const Navbar = () => {
       >
         <p
           className="h-10 mt-10 w-full text-white  bg-gray-500 flex items-center justify-center rounded-2xl hover:bg-gray-400 cursor-pointer "
+          onClick={() => {
+            setVisibleRight(false);
+            navigate("/");
+          }}
+        >
+          Home
+        </p>
+        <p
+          className="h-10 mt-5 w-full text-white  bg-gray-500 flex items-center justify-center rounded-2xl hover:bg-gray-400 cursor-pointer "
           onClick={() => {
             setVisibleRight(false);
             navigate("/orders");
