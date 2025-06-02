@@ -59,13 +59,13 @@ const Navbar = () => {
   console.log(userData?.data);
 
   const user = userData?.data;
-  const x = user; // dont remove this x as this is to trigger userData to refetch continously
   const count = userData?.data?.cartItems?.length || 0;
   const isUserLoggedIn = localStorage.getItem("user");
   const role = localStorage.getItem("role");
 
   return (
     <nav className="z-100 w-full h-[50px] bg-gray-700 sticky top-0 flex items-center justify-between">
+      <p className="hidden">{user?.name}</p>
       <Link to="/">
         <h4 className="ml-[20px] transition-colors text-2xl duration-200 text-black hover:bg-white hover:text-black py-2 px-4 rounded-2xl cursor-pointer">
           SHOPPER

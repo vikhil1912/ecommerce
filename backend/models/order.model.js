@@ -11,7 +11,7 @@ const orderSchema = new mongoose.Schema(
       {
         product: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
+          ref: "product",
           required: true,
         },
         quantity: {
@@ -23,6 +23,21 @@ const orderSchema = new mongoose.Schema(
           type: Number,
           required: true,
           min: 0,
+        },
+        updatedAt: {
+          type: Date,
+          default: Date.now,
+        },
+        status: {
+          type: String,
+          enum: [
+            "placed",
+            "shipped",
+            "outfordelivery",
+            "delivered",
+            "cancelled",
+          ],
+          default: "placed",
         },
       },
     ],

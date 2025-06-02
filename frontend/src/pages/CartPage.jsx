@@ -20,8 +20,8 @@ const CartPage = () => {
   const products = cartProducts?.data || [];
   if (cartItemsLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="loader"></div>
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-gray-500">Loading...</p>
       </div>
     );
   }
