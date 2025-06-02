@@ -34,7 +34,7 @@ const ProductList = () => {
   });
   const products = allProducts?.data || null;
   return (
-    <table className=" min-w-full divide-y divide-gray-700">
+    <table className=" w-full divide-y divide-gray-700">
       <thead className="bg-gray-700">
         <tr>
           <th
@@ -81,11 +81,10 @@ const ProductList = () => {
                     <img
                       className="h-10 w-10 rounded-full object-cover"
                       src={product.image}
-                      alt={product.name}
                     />
                   </div>
                   <div className="ml-4">
-                    <div className="text-sm font-medium text-white">
+                    <div className="max-w-44 line-clamp-1 text-sm font-medium text-white">
                       {product.name}
                     </div>
                   </div>

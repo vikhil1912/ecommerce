@@ -12,8 +12,8 @@ const tabs = [
 const AdminPage = () => {
   const [tab, setTab] = useState(1);
   return (
-    <div className="flex flex-col items-center ">
-      <div className="flex flex-col items-center justify-around py-10">
+    <div className="flex flex-col items-center  ">
+      <div className="w-full flex flex-col items-center justify-around py-10 px-48">
         <h2 className="text-4xl text-white mb-4">Admin Dashboard</h2>
         <div className="flex mb-7">
           {tabs.map((t) => {
