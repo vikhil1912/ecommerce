@@ -3,7 +3,7 @@ import OrderProductItem from "./OrderProductItem";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "../lib/axios.js";
 
-const OrderBlock = ({ order }) => {
+const OrderBlock = ({ order, isAdmin }) => {
   return (
     <div className="border rounded-lg shadow-sm p-4 max-w-4xl mt-3 mx-auto mb-7">
       <div className="flex justify-between text-sm text-gray-500">
@@ -42,6 +42,7 @@ const OrderBlock = ({ order }) => {
           product={product}
           updatedDate={order.updatedAt}
           order={order}
+          isAdmin={isAdmin}
         />
       ))}
     </div>

@@ -2,19 +2,25 @@ import React, { useState } from "react";
 import { BarChart, PlusCircle, ShoppingBasket } from "lucide-react";
 import CreateProduct from "../components/CreateProduct.jsx";
 import ProductList from "../components/ProductList.jsx";
-import Analytics from "../components/Analytics.jsx";
+import AdminOrders from "../components/AdminOrders.jsx";
 
 const tabs = [
   { id: 1, name: "Create Dashboard", icon: PlusCircle, comp: CreateProduct },
   { id: 2, name: "Products", icon: ShoppingBasket, comp: ProductList },
-  { id: 3, name: "Analytics", icon: BarChart, comp: Analytics },
+  { id: 3, name: "Orders", icon: BarChart, comp: AdminOrders },
 ];
 const AdminPage = () => {
   const [tab, setTab] = useState(1);
   return (
-    <div className="flex flex-col items-center  ">
+    <div className={`flex flex-col items-center ${tab === 3 && "bg-white"} `}>
       <div className="w-full flex flex-col items-center justify-around py-10 px-48">
-        <h2 className="text-4xl text-white mb-4">Admin Dashboard</h2>
+        <h2
+          className={`text-4xl ${tab !== 3 && "text-white"} mb-4 ${
+            tab === 3 && "text-black"
+          }`}
+        >
+          Admin Dashboard
+        </h2>
         <div className="flex mb-7">
           {tabs.map((t) => {
             return (

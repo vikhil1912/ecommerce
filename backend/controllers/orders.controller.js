@@ -39,12 +39,14 @@ export const updateOrderStatus = async (req, res) => {
   try {
     const { status, productId } = req.body;
     if (!status) return res.status(400).json({ message: "Status is required" });
+    if (!productId)
+      return res.status(400).json({ message: "Product ID is required" });
     const order = await Order.findById(req.params.id).populate(
       "products.product"
     );
     if (!order) return res.status(404).json({ message: "Order not found" });
     order.products.forEach((product) => {
-      if (product.product._id.toString() === productId) {
+      if (product.product._id.toString() === productId.toString()) {
         product.status = status;
         product.updatedAt = new Date();
       }
