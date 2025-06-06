@@ -44,7 +44,7 @@ export const createCheckoutSession = async (req, res) => {
             };
           })
         ),
-        address: address._id.toString(),
+        address: JSON.stringify(address),
       },
     });
 
@@ -66,6 +66,7 @@ export const checkoutSuccess = async (req, res) => {
         return res.status(400).json({ message: "Order already placed" });
       }
       const products = JSON.parse(session.metadata.products);
+      const addressParsed = JSON.parse(session.metadata.address);
       const newOrder = new Order({
         user: session.metadata.userId,
         products: products.map((product) => {
@@ -75,7 +76,7 @@ export const checkoutSuccess = async (req, res) => {
             quantity: product.quantity,
           };
         }),
-        address: session.metadata.address,
+        address: addressParsed,
         totalAmount: session.amount_total / 100,
         stripeSessionId: session.id,
       });

@@ -43,4 +43,6 @@ const schema = mongoose.Schema(
 
 const model = mongoose.model("address", schema);
 
+export const addressSchema = schema;
+
 export default model;

@@ -4,6 +4,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "../lib/axios.js";
 
 const OrderBlock = ({ order, isAdmin }) => {
+  console.log(order);
+
   return (
     <div className="border rounded-lg shadow-sm p-4 max-w-4xl mt-3 mx-auto mb-7">
       <div className="flex justify-between text-sm text-gray-500">
@@ -19,7 +21,7 @@ const OrderBlock = ({ order, isAdmin }) => {
           <p className="font-medium">SHIP TO</p>
           <div className="group relative">
             <p className="text-blue-600 cursor-pointer hover:underline">
-              {order.address.name} ▾
+              {order?.address?.name} ▾
             </p>
             <div
               className={`hidden group-hover:block absolute top-10 right-0transition-all duration-300 ease-in-out ${
